@@ -4,24 +4,24 @@
 //g++ -Iinclude src/SerialParser.cpp tests/test_parser.cpp -o laso 
 //./laso
 
-void sumar(uint8_t* payload, uint8_t len){
+void sumar(laso::u8bit* payload, laso::u8bit len){
     std::cout << "Comando sumar recibido\n";
 }
 
 
 int main(){
-    SerialParser router;
+    laso::SerialParser router;
 
     router.addCommand(1, sumar);
 
-    uint8_t paquete[] ={
+    laso::u8bit paquete[] ={
         0x02, // inicio
         0x01, // comando
         0x00  // tamaño
     };
 
 
-    for(uint8_t byte : paquete){
+    for(laso::u8bit byte : paquete){
         router.eatByte(byte);
     }
 

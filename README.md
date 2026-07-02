@@ -15,18 +15,20 @@ SerialParser router;
 
 //argumentos del motor
 struct ArgumentosMotor {
-    uint8_t  idMotor;    
+    laso::u8bit  idMotor;    
     uint16_t pasos;      
     float    velocidad;  
-}; 
+}__attribute__((packed)); 
+//attribute packed es para eliminar el padding en la memoria
 
-void fun(uint8_t* payload, uint8_t length) {
-    if (length < sizeof(ArgumentosMotor)) return;
-
-    ArgumentosMotor* args = (ArgumentosMotor*) payload;
-
-    if (args->idMotor == 1) {
-        moverMotor(args->pasos, args->velocidad);
+void fun(laso::u8bit* payload, laso::u8bit length) {
+    if (length != sizeof(ArgumentosMotor)) return;
+    //MAL
+    //ArgumentosMotor* args = (ArgumentosMotor*) payload;
+    ArgumentosMotor args
+    memcpy(args,payload,sizeof(ArgumentosMotor))
+    if (args.idMotor == 1) {
+        moverMotor(args.pasos, args.velocidad);
     }
 }
 
@@ -65,4 +67,5 @@ El sistema parser buscara la mejor coincidencia y ejecutara la función deseada,
 _[START][CMDID][LENGTH][PAYLOAD]_
 El primer bit recibido sera para indicar que escuche router, ese bit tendra un valor de 0x02, el siguiente es el id del comando que diste cuando llamaste a `router.addCommand()` el tercero es la cantidad de argumentos que recibira la función que escribiste y la última cadena de bytes es el valor de cada argumento de forma ordenada, como se indica en el ejemplo realizando un _cast_ entre una estructura que recibe los comandos y la carga útil se ahorran problemas de recepción de datos.
 
+## Nuevos tipos de datos
 **Estar atento a posibles cambios de laso**

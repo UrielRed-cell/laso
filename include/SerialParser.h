@@ -2,25 +2,35 @@
 #define SERIALPARSER_H
 #include "types.h"
 
-typedef void (*CommandFunction)(uint8_t* payload,uint8_t length);
 
-class SerialParser {
+namespace laso{
 
-private:
+    using CommandFunction = void (*)(laso::u8bit* payload, laso::u8bit length);
 
-    laso::u8bit buffer[64];
-    laso::u8bit index=0;
-    laso::u8bit payloadLength=0;
-    laso::u8bit state=0;
-    laso::u8bit commandId=0;
+    struct Command {
+        laso::u8bit id;
+        CommandFunction function;
+    };
 
-public:
+    class SerialParser {
 
-    SerialParser();
-    void begin();
-    void addCommand(laso::u8bit id,CommandFunction fun);
-    void parse(laso::u8bit cmdId,laso::u8bit* payload,laso::u8bit payloadLen);
-    void eatByte(laso::u8bit incomingByte); 
-};
+    private:
+        
+        Command commands[20];
+        laso::u8bit commandCount;
+        laso::u8bit buffer[64];
+        laso::u8bit index;
+        laso::u8bit payloadLength;
+        laso::u8bit state;
+        laso::u8bit commandId;
 
+    public:
+
+        SerialParser();
+        void begin();
+        void addCommand(laso::u8bit id,CommandFunction fun);
+        void parse(laso::u8bit cmdId,laso::u8bit* payload,laso::u8bit payloadLen);
+        void eatByte(laso::u8bit incomingByte); 
+    };
+}
 #endif
