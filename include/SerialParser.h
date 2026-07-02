@@ -1,6 +1,6 @@
 #ifndef SERIALPARSER_H
 #define SERIALPARSER_H
-#include <cstdint>
+#include "types.h"
 
 typedef void (*CommandFunction)(uint8_t* payload,uint8_t length);
 
@@ -8,19 +8,19 @@ class SerialParser {
 
 private:
 
-    uint8_t buffer[64];
-    uint8_t index=0;
-    uint8_t payloadLength=0;
-    uint8_t state=0;
-    uint8_t commandId=0;
+    laso::u8bit buffer[64];
+    laso::u8bit index=0;
+    laso::u8bit payloadLength=0;
+    laso::u8bit state=0;
+    laso::u8bit commandId=0;
 
 public:
 
     SerialParser();
     void begin();
-    void addCommand(uint8_t id,CommandFunction fun);
-    void parse(uint8_t cmdId,uint8_t* payload,uint8_t payloadLen);
-    void eatByte(uint8_t incomingByte); 
+    void addCommand(laso::u8bit id,CommandFunction fun);
+    void parse(laso::u8bit cmdId,laso::u8bit* payload,laso::u8bit payloadLen);
+    void eatByte(laso::u8bit incomingByte); 
 };
 
 #endif
